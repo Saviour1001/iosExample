@@ -43,10 +43,6 @@ class Web3RPC : ObservableObject {
         })
     }
     
-    func getPublicKey() {
-        
-    }
-    
     func getBalance() {
         Task {
             let blockChanged = await checkLatestBlockChanged()
@@ -58,9 +54,9 @@ class Web3RPC : ObservableObject {
                     print(error)
                 }
                 let balance = TorusWeb3Utils.toEther(wei: Wei(val ?? 0))
-                await MainActor.run(body: {
-                    self.balance = balance
-                })
+                DispatchQueue.main.async { [weak self] in
+                    self?.balance = balance
+                }
             }
             
         }
